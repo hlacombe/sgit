@@ -23,6 +23,6 @@ object Create{
     FileManager.writeFile(".sgit/HEAD", ".sgit/refs/head/master")
     val index = Entity.Index()
     InputOutput.Serializer.writeObject(index, ".sgit/index")
-    101
+    100
   }
 }
