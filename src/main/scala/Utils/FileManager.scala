@@ -1,13 +1,11 @@
 package Utils
 import java.io.{File => JFile}
 
-import Entity._
 import better.files._
 
 object FileManager {
 
   def createFileFromFile(path: String, hash: String): Option[File] = {
-    Logger.log(path + "|||||" + hash)
     val content = DatabaseManager.getFileByHash(hash)
     if(content.exists){
       Some(createFile(path).overwrite(content.contentAsString))
@@ -84,50 +82,6 @@ object FileManager {
     file.write(string)
   }
 
-  def getWorkingTree: Option[Entity.Tree] ={
-    var elements: Seq[Entity.TreeOrBlob] = Nil
-    val iter = walkWorkingTree()
-
-    var elem = iter.next()
-    val root = createElement(elem).asInstanceOf[Entity.Tree]
-    elements = elements:+root
-    while(iter.hasNext){
-      elem = iter.next()
-      elements = elements:+createElement(elem)
-    }
-    elements.foreach(f => addChildren(f, elements))
-    Option(root)
-  }
-
-  def createElement(file: File): Entity.TreeOrBlob ={
-    if(!file.isDirectory){
-      Entity.Blob(hash = file.sha1, path = file.pathAsString)
-    }
-    else{
-      Entity.Tree(hash = file.sha1, path= file.pathAsString)
-    }
-  }
-
-  def addChildren(elem: TreeOrBlob, elements: Seq[TreeOrBlob]): Unit ={
-    elem match {
-      case tree: Tree =>
-        val dir = elem.get_path().toFile
-        val children: Iterator[File] = dir.glob("*", maxDepth = 1)
-        var childrenToAdd: Seq[TreeOrBlob] = Nil
-        while (children.hasNext) {
-          val current = children.next()
-          val find: Option[TreeOrBlob] = elements.find(p => checksum(current) == p.get_hash())
-          if (find.isDefined) {
-            childrenToAdd = childrenToAdd :+ find.get
-          }
-        }
-        if (childrenToAdd.nonEmpty) {
-          tree.addChildren(Option(childrenToAdd))
-        }
-      case _ =>
-    }
-  }
-
   def getInfos(file: JFile): (String, String) ={
     val path = file.toPath.toString
     val hash = checksum(path.toFile)
@@ -145,5 +99,4 @@ object FileManager {
     iterator.foreach(f => if(!f.isDirectory) result = result:+getInfos(f))
     result
   }
-
 }

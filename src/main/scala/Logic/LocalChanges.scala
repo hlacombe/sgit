@@ -1,13 +1,6 @@
 package Logic
 
-import Entity.TreeOrBlob
-import Utils._
-
 object LocalChanges {
-
-  def getCurrentWorkingTree: Option[TreeOrBlob] ={
-    FileManager.getWorkingTree
-  }
 
   def getUntrackedFiles(wdFilesPath: Set[String], allObjects: Set[String]): Set[String] = {
     wdFilesPath.diff(allObjects)

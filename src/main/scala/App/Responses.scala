@@ -13,6 +13,7 @@ object Responses {
     (203,"Tag not created - no commits yet"),
     (204,"Repository is not clean - Commit changes before switching branches"),
     (205,"Cannot find element to checkout from"),
+    (207,"Command not Found"),
     (206,"Error - No commit found for checkout")
 
   )

@@ -21,7 +21,7 @@ object Dispatcher{
         case "checkout" => toExecute = Checkout.action
 
         case "reset" => FileManager.reset()
-        case _ => println("Dispatcher Error")
+        case _ => () => 207
       }
       val result = toExecute.apply(config)
       Logger.log(Responses.getResponseMessage(result))

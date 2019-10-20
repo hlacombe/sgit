@@ -22,18 +22,15 @@ object DatabaseManager {
     if(refToBranch == "detached head"){
       val commit = InputOutput.Serializer.readObject(CheckRepo.nearestRepo().getOrElse("") + "/.sgit/HEAD-DETACHED").asInstanceOf[Commit]
       val fakeBranch = Branch(name = "detached head" , ref = Some(commit))
-      println("fakeBranch: " + fakeBranch)
       fakeBranch
     }
     else {
-      println(refToBranch)
       val file = refToBranch.toFile
       if(file.exists){
         InputOutput.Serializer.readObject(CheckRepo.nearestRepo().getOrElse("") +"/"+ refToBranch).asInstanceOf[Branch]
       } else {
         val newBranch = Entity.Branch(name = "master", ref = None)
         InputOutput.Serializer.writeObject(newBranch,".sgit/refs/head/master")
-        println("NewBranch: " + newBranch)
         newBranch
       }
     }

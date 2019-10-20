@@ -2,7 +2,7 @@ package Entity
 
 import java.io.File
 
-import Utils.FileManager
+import Utils.{FileManager, Logger}
 
 import scala.collection.immutable.HashMap
 
@@ -23,6 +23,7 @@ case class Index(
     Utils.FileManager.copyToDatabase(from = infos._2, withName = infos._1)
     val newIndex = Index(stagedFiles = stagedFiles + (infos._1 -> infos._2))
     InputOutput.Serializer.writeObject(newIndex,".sgit/index")
+    Logger.log("File: "+file.getName+" added to Stage")
   }
 
   def existsInIndex(file: File): Boolean = {
@@ -36,6 +37,7 @@ case class Index(
     if(path.isDefined){
       val newIndex = Index(stagedFiles = stagedFiles.filter( t => t._2 != infos._2))
       InputOutput.Serializer.writeObject(newIndex,".sgit/index")
+      Logger.log("File: "+get.getName+" deleted")
     }
   }
 

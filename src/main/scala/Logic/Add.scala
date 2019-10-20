@@ -44,8 +44,7 @@ object Add {
       }
       recursiveLoop(config.copy(files = filesToAdd.tail))
     }
-
     recursiveLoop(config)
-    200
+    100
   }
 }
